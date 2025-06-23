@@ -1,3 +1,4 @@
+PYTHON=python3
 SRC =  \
 	bmp.c \
 	bricks.c \
@@ -31,7 +32,7 @@ init: trifire
 .PHONY: movie
 movie: movie.mp4
 movie.mp4: movie.py frame-1.bmp
-	python3 movie.py frames-*.bmp
+	${PYTHON} movie.py frame-*.bmp
 
 
 .PHONY: clean

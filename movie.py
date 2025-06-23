@@ -5,13 +5,15 @@ except ModuleNotFoundError as e:
     raise 
 import glob
 import os
+import sys
 import re
 
 def framekey(s):
     return int(re.search(r'\d+',s).group())
 
 # Grab the frames and sort numerically
-frames = sorted(glob.glob("frame-*.bmp"),key=framekey)
+frames = sys.argv[1:] or glob.glob("frame-*.bmp")
+frames = sorted(frames,key=framekey) 
 assert frames
 
 # Get the frame size info (assume all the same)
@@ -19,7 +21,7 @@ frame0 = cv2.imread(frames[0])
 height, width, _ = frame0.shape
 
 # Create a video writer
-fourcc = cv2.VideoWriter_fourcc(*'MP4v')
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 fps = 1
 video = cv2.VideoWriter('movie.mp4', fourcc, fps, (width, height))
 
