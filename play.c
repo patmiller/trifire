@@ -8,16 +8,13 @@
 #include "sha1.h"
 #include "penrose.h"
 
-int play(struct State* state, uint32_t* area, char command) {
+int play(struct State* state, char command) {
   // We are required to adjust the state (we do not allow overflow
   if (state->turn == 0x7fffffffffffffff) return 0;
 
   // We get random numbers by taking the SHA1 hash of the state
   uint8_t digest[20];
   SHA1(digest,state,sizeof(struct State));
-  for(int i=0;i<20;++i) {
-    printf("%d\n",(int)digest[i]);
-  }
   
   // Update the state according to the command
   switch(command) {
@@ -40,11 +37,6 @@ int play(struct State* state, uint32_t* area, char command) {
 
   // We always advance state
   state->turn++;
-
-  // We need to render the scene.  The only sprite active right now is
-  // the trifire and we need to add coins and the cannon
-  if ( !render(area, 640,480, penrose[state->rotation], PENROSE_WIDTH, PENROSE_HEIGHT,
-	       state->tri_x, 235) ) return 0;
 
   return 1;
 }

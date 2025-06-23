@@ -2,7 +2,10 @@
 
 #include <stdint.h>
 
-int render(uint32_t* area,
+#include "penrose.h"
+#include "state.h"
+
+int sprite(uint32_t* area,
 	   unsigned area_width, unsigned area_height,
 	   uint32_t* sprite,
 	   unsigned sprite_width, unsigned sprite_height,
@@ -18,5 +21,18 @@ int render(uint32_t* area,
       area[xx + yy*area_width] = pixel;
     }
   }
+  return 1;
+}
+
+int render(uint32_t* area,
+	   unsigned area_width, unsigned area_height,
+	   struct State* state) {
+  // We need to render the scene.  The only sprite active right now is
+  // the trifire and we need to add coins and the cannon
+  if ( !sprite(area, area_width, area_height,
+	       penrose[state->rotation],
+	       PENROSE_WIDTH, PENROSE_HEIGHT,
+	       state->tri_x, 235) ) return 0;
+
   return 1;
 }

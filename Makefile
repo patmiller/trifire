@@ -12,6 +12,7 @@ OBJ = ${SRC:.c=.o}
 HEADERS = ${shell ls ${SRC:.c=.h}}
 OTHER = \
 	Makefile \
+	movie.py \
 	README.md \
 	state.h \
 	gameplay.bmp
@@ -27,9 +28,15 @@ run: trifire init
 init: trifire
 	./trifire -1 i
 
+.PHONY: movie
+movie: movie.mp4
+movie.mp4: movie.py frame-1.bmp
+	python3 movie.py frames-*.bmp
+
+
 .PHONY: clean
 clean:
-	rm -f trifire output.bmp ${OBJ} *~ state-*.json
+	rm -f trifire output.bmp ${OBJ} *~ state-*.json frame-*.bmp movie.mp4
 
 .PHONY: headers
 	grep '#include "' ${SRC} | tr ' ' '\012' | sort -u | grep -v '#include' | tr -d '"'
@@ -42,9 +49,9 @@ gitadd:
 bmp.o: bmp.c bmp.h
 bricks.o: bricks.c bricks.h
 coin.o: coin.c coin.h
-main.o: main.c coin.h bmp.h bricks.h state.h
+main.o: main.c bmp.h bricks.h coin.h render.h state.h
 penrose.o: penrose.c penrose.h
-play.o: play.c play.h sha1.h state.h render.h penrose.h
+play.o: play.c play.h penrose.h render.h sha1.h state.h 
 render.o: render.c render.h
 sha1.o: sha1.c sha1.h
 
