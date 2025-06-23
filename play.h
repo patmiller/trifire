@@ -2,4 +2,4 @@
 #include <stdint.h>
 #include "state.h"
 
-extern int play(struct State* state, uint32_t* area, char command);
+extern int play(struct State* state, char command);
