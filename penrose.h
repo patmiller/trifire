@@ -1,6 +1,8 @@
+// Copyright 2025 - Patrick Miller
 #pragma once
 
 #include <stdint.h>
+
 #define PENROSE_WIDTH (88)
 #define PENROSE_HEIGHT (80)
 

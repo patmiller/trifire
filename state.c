@@ -1,64 +1,138 @@
+// Copyright 2025 - Patrick Miller
+
+#include "state.h"
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "state.h"
-
-// We're assuming very scripted JSON here
+// We're assuming very scripted JSON here where each item
+// is a signed long int, e.g.
 // {
 // "turn": 0,
 // "coin_x": 0,
 // "rotation": 0,
 // "tri_x": 0
 // }
-int read_state(FILE* fp, struct State* s) {
-  char line[80];
-  // Read a {
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if (strncmp(line,"{\n",80) != 0) return 0;
-  
-  // Read "turn": 0,
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if ( sscanf(line,"\"turn\": %lu,",&(s->turn)) != 1 ) return 0;
 
-  // Read "coin_x": 0,
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if ( sscanf(line,"\"coin_x\": %u,",&(s->coin_x)) != 1 ) return 0;
+// So, we just have keys that we look for in the form "foo", not foo
+// and a pointer to a field in the struct where we want to put the long
+struct keyvalue {
+  const char* key;
+  long* value;
+};
 
-  // Read "rotation": 0,
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if ( sscanf(line,"\"rotation\": %u,",&(s->rotation)) != 1 ) return 0;
-  if ( s->rotation > 2 ) return 0;
+// Here, we just initialize the key:value pairs for use in the reader
+// and writer to keep them consistent
+static void get_state_pointers(struct keyvalue fields[NSTATE_FIELDS+1],
+                               struct State* s) {
+  // Order doesn't much matter here, but we must have a correct
+  // NSTATE_FIELDS count and the internal address must match
+  fields[0].key = "\"turn\"";     fields[0].value = &(s->turn);
+  fields[1].key = "\"coin_x\"";   fields[1].value = &(s->coin_x);
+  fields[2].key = "\"rotation\""; fields[2].value = &(s->rotation);
+  fields[3].key = "\"cannon\"";   fields[3].value = &(s->cannon);
+  fields[4].key = "\"tri_x\"";    fields[4].value = &(s->tri_x);
+  fields[5].key = NULL;           fields[5].value = NULL;
+}
 
-  // Read "cannon": 0,
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if ( sscanf(line,"\"cannon\": %u,",&(s->cannon)) != 1 ) return 0;
-  if ( s->cannon > 2 ) return 0;
+// Take a null-terminated string buffer (json dict as a string)
+// and read the state fields. Any undefined field is set to the
+// default
+int read_state_string(const char* buffer, struct State* s) {
+  struct State DEFAULT = DEFAULT_STATE;
+  *s = DEFAULT;
 
-  // Read "tri_x": 0 (no comma)
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if ( sscanf(line,"\"tri_x\": %u",&(s->tri_x)) != 1 ) return 0;
+  // Here are the fields we are looking for
+  struct keyvalue fields[NSTATE_FIELDS+1];
+  get_state_pointers(fields, s);
 
-  // Read a }
-  if ( fgets(line,80,fp) == NULL ) return 0;
-  if (strncmp(line,"}\n",80) != 0) return 0;
+  // For each one, we look for, say "foo" in the string
+  // (note the use of "foo" not just foo).  Then we look
+  // for a colon and long int after the key
+  for (struct keyvalue* p = fields; p->key; ++p) {
+    const char* offset = strstr(buffer, p->key);
+    if (!offset) continue;
+    if ( sscanf(offset+strlen(p->key), ": %ld", p->value) < 0 ) return 0;
+  }
 
   return 1;
 }
 
+// This just pulls the defined fields out of a state variable
+// and converts it to string (in a sized buffer)
+char* string_state(struct State* s, char* buffer, unsigned n) {
+  // Opening {
+  if (n < 2) return NULL;
+  strcpy(buffer, "{\n");
+  buffer += 2;
+  n -= 2;
+
+  // Here are the fields we are looking for
+  struct keyvalue fields[NSTATE_FIELDS+1];
+  get_state_pointers(fields, s);
+
+  // For each key, dump in the form (with , and \n as appropriate)
+  // "foo": 12345
+  // Note: the terminating null character is added with the final }
+  // below
+  for (struct keyvalue* p = fields; p->key; ++p) {
+    // We are doing this line at a time, but watch for overflow
+    // of the line buffer and the overall buffer
+    char line[80];
+    unsigned n_line = snprintf(line, sizeof(line),
+                               "%s: %ld", p->key, *p->value);
+    if (n_line >= sizeof(line)) return NULL;
+    if (n_line >= n) return NULL;
+    strcpy(buffer, line);
+    buffer += n_line;
+
+    n -= n_line;
+    if ( n < 2 ) return NULL;
+    if ((p+1)->key) {
+      buffer[0] = ',';
+      buffer += 1;
+      n -= 1;
+    }
+    buffer[0] = '\n';
+    buffer += 1;
+    n -= 1;
+  }
+
+  // Closing }
+  if (n < 3) return NULL;  // Remember the null terminator!
+  strcpy(buffer, "}\n");
+  buffer += 2;
+  n -= 2;
+
+  return buffer;
+}
+
+// This just dumps the json to a file called state-<turn>.json
 int dump_state(struct State* s) {
   char filename[80];
-  if (snprintf(filename,80,"state-%ld.json",s->turn) < 0) return 5;
-  FILE* fp = fopen(filename,"w");
+  if (snprintf(filename, 80, "state-%ld.json", s->turn) < 0) return 5;
+  FILE* fp = fopen(filename, "w");
   if (!fp) return 6;
 
-  if ( fputs("{\n",fp) == EOF ) return 7;
-  if ( fprintf(fp,"\"turn\": %lu\n",s->turn) == EOF ) return 7;
-  if ( fprintf(fp,"\"coin_x\": %u\n",s->coin_x) == EOF ) return 7;
-  if ( fprintf(fp,"\"rotation\": %u\n",s->rotation) == EOF ) return 7;
-  if ( fprintf(fp,"\"cannon\": %u\n",s->cannon) == EOF ) return 7;
-  if ( fprintf(fp,"\"tri_x\": %u\n",s->tri_x) == EOF ) return 7;
-  if ( fputs("}\n",fp) == EOF ) return 7;
+  // Error 7 likely means that you need a bigger buffer here
+  char buffer[1024];
+  if (!string_state(s, buffer, sizeof(buffer))) return 7;
+  if ( fputs(buffer, fp) == EOF ) return 7;
   return 0;
+}
+
+// Use a "big enough" buffer and read a block of data, then parse
+// as a state json.
+int read_state(FILE* fp, struct State* s) {
+  // Make a big buffer, we'll detect if we don't have enough space
+  char buffer[1024];
+  int n = fread(buffer, 1, sizeof(buffer), fp);
+  if ( n <= 0 || n >= 1023 ) return 0;
+
+  // Then parse it
+  if ( !read_state_string(buffer, s) ) return 0;
+
+  return 1;
 }
