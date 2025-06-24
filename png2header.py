@@ -17,8 +17,8 @@ with open(base+'.h','w') as out:
     print('#pragma once',file=out)
     print('#include <stdint.h>',file=out)
     print(file=out)
-    print(f'#define {base.upper()}_WIDTH = ({im.size[0]})',file=out)
-    print(f'#define {base.upper()}_HEIGHT = ({im.size[1]})',file=out)
+    print(f'#define {base.upper()}_WIDTH ({im.size[0]})',file=out)
+    print(f'#define {base.upper()}_HEIGHT ({im.size[1]})',file=out)
     print(f'extern uint32_t {base}[{base.upper()}_WIDTH * {base.upper()}_HEIGHT];',file=out)
 
 # OK, then take the pixels and pack them into that array in the .c file
