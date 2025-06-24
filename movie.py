@@ -28,6 +28,9 @@ video = cv2.VideoWriter('movie.mp4', fourcc, fps, (width, height))
 # Fill in the frames we want (in numerical order)
 for filename in frames:
     frame = cv2.imread(filename)
+    print(frame.shape)
+    print(frame)
+    xx
     video.write(frame)
 
 video.release()

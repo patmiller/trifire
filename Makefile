@@ -1,22 +1,22 @@
 PYTHON=python3
-SRC =  \
+MSRC =  \
 	bmp.c \
 	bricks.c \
 	coin.c \
-	main.c \
 	penrose.c \
 	play.c \
 	render.c \
 	sha1.c \
 	state.c
+SRC = ${MSRC} main.c
 OBJ = ${SRC:.c=.o}
-HEADERS = ${shell ls ${SRC:.c=.h}}
+HEADERS = ${shell ls ${MSRC:.c=.h}}
 OTHER = \
 	Makefile \
 	movie.py \
 	README.md \
 	state.h \
-	gameplay.bmp
+	gameplay.bmp 
 
 .PHONY: run
 run: trifire init
@@ -34,13 +34,14 @@ movie: movie.mp4
 movie.mp4: movie.py frame-1.bmp
 	${PYTHON} movie.py frame-*.bmp
 
+.PHONY: pytest
+pytest:
+	$(PYTHON) -m pip install .
+	$(PYTHON) pytest.py rrrrslslslrrrsss
 
 .PHONY: clean
 clean:
-	rm -f trifire output.bmp ${OBJ} *~ state-*.json frame-*.bmp movie.mp4
-
-.PHONY: headers
-	grep '#include "' ${SRC} | tr ' ' '\012' | sort -u | grep -v '#include' | tr -d '"'
+	rm -rf trifire.egg-info build trifire output.bmp ${OBJ} *~ state-*.json frame-*.bmp movie.mp4
 
 .PHONY: gitadd
 gitadd:
