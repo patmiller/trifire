@@ -1,4 +1,7 @@
+// Copyright (none)
 //  portable, public-domain C implementation of SHA-1, based on FIPS PUB 180-1
+
+#include "sha1.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -19,7 +22,11 @@ static void SHA1Transform(uint32_t state[5], const uint8_t buffer[64]) {
     uint32_t a, b, c, d, e, i, j, t, m[80];
 
     for (i = 0, j = 0; i < 16; ++i, j += 4)
-        m[i] = (buffer[j] << 24) | (buffer[j+1] << 16) | (buffer[j+2] << 8) | (buffer[j+3]);
+        m[i] =
+          (buffer[j] << 24) |
+          (buffer[j+1] << 16) |
+          (buffer[j+2] << 8) |
+          (buffer[j+3]);
     for ( ; i < 80; ++i)
         m[i] = ROTLEFT(m[i-3] ^ m[i-8] ^ m[i-14] ^ m[i-16], 1);
 
@@ -29,15 +36,17 @@ static void SHA1Transform(uint32_t state[5], const uint8_t buffer[64]) {
     d = state[3];
     e = state[4];
 
-    for(i = 0; i < 80; ++i) {
+    for (i = 0; i < 80; ++i) {
         if (i < 20)
-            t = ROTLEFT(a,5) + ((b & c) | ((~b) & d)) + e + m[i] + 0x5A827999;
+            t = ROTLEFT(a, 5) + ((b & c) | ((~b) & d)) + e + m[i] + 0x5A827999;
         else if (i < 40)
-            t = ROTLEFT(a,5) + (b ^ c ^ d) + e + m[i] + 0x6ED9EBA1;
+            t = ROTLEFT(a, 5) + (b ^ c ^ d) + e + m[i] + 0x6ED9EBA1;
         else if (i < 60)
-            t = ROTLEFT(a,5) + ((b & c) | (b & d) | (c & d)) + e + m[i] + 0x8F1BBCDC;
+            t = ROTLEFT(a, 5) + ((b & c) |
+                                 (b & d) |
+                                 (c & d)) + e + m[i] + 0x8F1BBCDC;
         else
-            t = ROTLEFT(a,5) + (b ^ c ^ d) + e + m[i] + 0xCA62C1D6;
+            t = ROTLEFT(a, 5) + (b ^ c ^ d) + e + m[i] + 0xCA62C1D6;
 
         e = d;
         d = c;
@@ -87,7 +96,8 @@ static void SHA1Final(uint8_t digest[20], SHA1_CTX* ctx) {
     uint32_t i;
 
     for (i = 0; i < 8; ++i)
-        bits[i] = (uint8_t)((ctx->count[(i >= 4)] >> ((3 - (i & 3)) * 8)) & 0xFF);
+        bits[i] = (uint8_t)((ctx->count[(i >= 4)] >>
+                             ((3 - (i & 3)) * 8)) & 0xFF);
 
     size_t index = (ctx->count[0] >> 3) & 0x3f;
     size_t padLen = (index < 56) ? (56 - index) : (120 - index);

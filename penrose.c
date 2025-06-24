@@ -1,4 +1,6 @@
+// Copyright 2025 - Patrick Miller
 #include "penrose.h"
+
 #include <stdint.h>
 
 uint32_t penrose0[PENROSE_HEIGHT*PENROSE_WIDTH] = {

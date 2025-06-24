@@ -1,3 +1,5 @@
+// Copyright 2025 - Patrick Miller
+
 #include "render.h"
 
 #include <stdint.h>
@@ -6,13 +8,13 @@
 #include "state.h"
 
 int sprite(uint32_t* area,
-	   unsigned area_width, unsigned area_height,
-	   uint32_t* sprite,
-	   unsigned sprite_width, unsigned sprite_height,
-	   unsigned x, unsigned y
-	   ) {
-  for(int j=0;j<sprite_height;++j) {
-    for(int i=0;i<sprite_width;++i) {
+           unsigned area_width, unsigned area_height,
+           uint32_t* sprite,
+           unsigned sprite_width, unsigned sprite_height,
+           unsigned x, unsigned y
+           ) {
+  for (unsigned j = 0; j < sprite_height; ++j) {
+    for (unsigned i = 0; i < sprite_width; ++i) {
       unsigned pixel = sprite[i + j*sprite_width];
       unsigned xx = x + i;
       unsigned yy = y + j;
@@ -25,14 +27,14 @@ int sprite(uint32_t* area,
 }
 
 int render(uint32_t* area,
-	   unsigned area_width, unsigned area_height,
-	   struct State* state) {
+           unsigned area_width, unsigned area_height,
+           struct State* state) {
   // We need to render the scene.  The only sprite active right now is
   // the trifire and we need to add coins and the cannon
   if ( !sprite(area, area_width, area_height,
-	       penrose[state->rotation],
-	       PENROSE_WIDTH, PENROSE_HEIGHT,
-	       state->tri_x, 235) ) return 0;
+               penrose[state->rotation],
+               PENROSE_WIDTH, PENROSE_HEIGHT,
+               state->tri_x, 235) ) return 0;
 
   return 1;
 }
