@@ -59,3 +59,12 @@ sha1.o: sha1.c sha1.h
 
 trifire: $(OBJ)
 	$(CC) -o trifire $(OBJ)
+
+.PHONY: install_luxcedia
+install_luxcedia:
+	cp trifire.html /var/www/html
+	cp trifire.cgi  /usr/lib/cgi-bin/trifire
+	chmod +x /usr/lib/cgi-bin/trifire
+	cp trifire.bmp trifire.mp4 /usr/lib/cgi-bin
+	chmod +x /usr/lib/cgi-bin/trifire.bmp
+	chmod +x /usr/lib/cgi-bin/trifire.mp4
