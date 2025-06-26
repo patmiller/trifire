@@ -3,13 +3,16 @@
 
 // Remember to update the state reader/writer in state.c
 // and to fix get_state_pointers() for these fields
-#define DEFAULT_STATE { 0,0,0,0,0 }
-#define NSTATE_FIELDS (5) // There are 5 fields in the State struct
+#define DEFAULT_STATE { 0,0,0,0,0,0,0,0 }
+#define NSTATE_FIELDS (8) // There are 8 fields in the State struct
 struct State {
   long turn;
   long coin_x;
+  long coin_y;
   long rotation;
   long cannon;
+  long cannon_t;
+  long cannon_offset;
   long tri_x;
 };
 

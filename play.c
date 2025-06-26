@@ -6,9 +6,13 @@
 #include <stdint.h>
 
 #include "penrose.h"
+#include "ball.h"
 #include "render.h"
 #include "sha1.h"
 #include "state.h"
+
+
+
 
 int play(struct State* state, char command) {
   // We are required to adjust the state (we do not allow overflow
@@ -17,8 +21,8 @@ int play(struct State* state, char command) {
   // We get random numbers by taking the SHA1 hash of the state
   uint8_t digest[20];
   SHA1(digest, state, sizeof(struct State));
-
-  // Update the state according to the command
+  // We can use the first 4 bytes of the digest to determine the next action
+  int randint = digest[0] | digest[1] << 8 | digest[2] << 16 | digest[3] << 24;
   switch (command) {
   case 's': {
     // Spin the trifire
@@ -33,6 +37,41 @@ int play(struct State* state, char command) {
     // translate left
     if (state->tri_x < 32) return 0;
     state->tri_x -= 32;
+  } break;
+  //Fire the trifire
+  case 'f': {
+    if (state->cannon == 0) return 0; // No cannon to fire
+    state->cannon--;
+    //recoil on the x axis based on the rotation
+    if (state->rotation == 0) {
+      // Move the trifire to the right a little bit
+      if (state->tri_x > 640 - 96) return 0; // Can't move right
+      state->tri_x += 32*(1 + randint % 2);
+      // If we go too far right correct it
+      if(state->tri_x > 640 - 96) {
+        state->tri_x = 640 - 96;
+      }
+    } else if (state->rotation == 1) {
+      // Move the trifire to the left
+      if (state->tri_x < 32) return 0; // Can't move left
+      state->tri_x -= 32*(3 + randint % 2);
+      // If we go too far left correct it
+      if (state->tri_x < 0) {
+        state->tri_x = 0;
+      }
+    } else {
+      // Move the trifire right a little bit
+      if (state->tri_x > 640 - 96) return 0;
+      state->tri_x += 32*(1 + randint % 2);
+      // If we go too far right correct it
+      if(state->tri_x > 640 - 96) {
+        state->tri_x = 640 - 96;
+      }
+    }
+    //Set cannon trajectory
+    state->cannon_t = state->rotation * 17 + (state->tri_x / 32) + 1;
+    //Spin the trifire regardless of whether or not we are able to move from the recoil we still spin
+    state->rotation = ( state->rotation + 1 )%3;
   } break;
   default: return 0;
   }
