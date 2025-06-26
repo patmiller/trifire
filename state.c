@@ -65,9 +65,9 @@ int read_state_string(const char* buffer, struct State* s) {
 char* string_state(struct State* s, char* buffer, unsigned n) {
   // Opening {
   if (n < 2) return NULL;
-  strcpy(buffer, "{\n");
-  buffer += 2;
-  n -= 2;
+  strcpy(buffer, "{");
+  buffer += 1;
+  n -= 1;
 
   // Here are the fields we are looking for
   struct keyvalue fields[NSTATE_FIELDS+1];
@@ -92,17 +92,15 @@ char* string_state(struct State* s, char* buffer, unsigned n) {
     if ( n < 2 ) return NULL;
     if ((p+1)->key) {
       buffer[0] = ',';
-      buffer += 1;
-      n -= 1;
+      buffer[1] = ' ';
+      buffer += 2;
+      n -= 2;
     }
-    buffer[0] = '\n';
-    buffer += 1;
-    n -= 1;
   }
 
   // Closing }
-  if (n < 3) return NULL;  // Remember the null terminator!
-  strcpy(buffer, "}\n");
+  if (n < 2) return NULL;  // Remember the null terminator!
+  strcpy(buffer, "}");
   buffer += 2;
   n -= 2;
 
