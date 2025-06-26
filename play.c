@@ -76,8 +76,17 @@ int play(struct State* state, char command) {
   default: return 0;
   }
 
-  // We always advance state
+  // We always advance state(check cannonball)
   state->turn++;
-
+  if(state->cannon_t != 0) {
+    // If the cannonball is active, we need to update its position
+    if (state->cannon_offset < 9) {
+      state->cannon_offset++;
+    } else {
+      // Cannonball is done with trajectory
+      state->cannon_t = 0;
+      state->cannon_offset = 0;
+    }
+  }
   return 1;
 }

@@ -20,7 +20,7 @@ int sprite(uint32_t* area,
       unsigned pixel = sprite[i + j*sprite_width];
       unsigned xx = x + i;
       unsigned yy = y + j;
-      if ( xx > area_width || xx < 0) return 0;
+      if ( xx > area_width) return 0;
       if ( yy > area_height ) return 0;
       area[xx + yy*area_width] = pixel;
     }
@@ -37,7 +37,9 @@ int render(uint32_t* area,
                penrose[state->rotation],
                PENROSE_WIDTH, PENROSE_HEIGHT,
                state->tri_x, 235) ) return 0;
+  //check if the cannonball is active
   if ( cannon_t != 0){
+    //if cannon ball is active, we need to render it
     if( trajectories[state->cannon_t][state->cannon_offset].x < 0 ||
         trajectories[state->cannon_t][state->cannon_offset].x >= area_width ||
         trajectories[state->cannon_t][state->cannon_offset].y >= area_height) {
