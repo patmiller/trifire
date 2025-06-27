@@ -12,6 +12,8 @@ my_module_extension = Extension(
 	     'render.c',
 	     'sha1.c',
 	     'state.c',
+             'ball.c',
+             'trajectories.c',
     ],
     include_dirs = [os.getcwd()],
 )
