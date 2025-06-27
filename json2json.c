@@ -21,10 +21,18 @@ int first_difference(const char *s1, const char *s2) {
 }
 
 int main(int argc, char** argv) {
-  // Simple command structure
+  struct State state = DEFAULT_STATE;
+  char response[2048];
+
+  // Simple command structure.  a.out command json [expected-result]
+  // With no commands, just output the default state 0
   if ( argc < 3 ) {
-    fprintf(stderr, "%s <command> <json of state>\n", argv[0]);
-    exit(1);
+    if (!string_state(&state, response, sizeof(response))) {
+      fprintf(stderr, "json packing failed\n");
+      return 1;
+    }
+    puts(response);
+    return 0;
   }
 
   const char* command = argv[1];
@@ -33,7 +41,6 @@ int main(int argc, char** argv) {
 
 
   // Parse some state out of the json
-  struct State state;
   if (!read_state_string(json, &state)) {
     fprintf(stderr, "Invalid state json: %s\n", json);
     return 1;
@@ -46,7 +53,6 @@ int main(int argc, char** argv) {
   }
 
   // Build the new json
-  char response[2048];
   if (!string_state(&state, response, sizeof(response))) {
     fprintf(stderr, "json packing failed\n");
     return 1;

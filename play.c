@@ -79,7 +79,7 @@ int play(struct State* state, char command) {
 
   // We always advance state
   state->turn++;
-  if( cannon_t != 0 ) {
+  if( state->cannon_t != 0 ) {
     // If the cannonball is active update its position
     state->cannon_offset++;
   }
