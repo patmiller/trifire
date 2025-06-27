@@ -1,73 +1,80 @@
 class Coords:
-    x = None
-    y = None
+    def __init__(self,x=None,y=None):
+        self.x = x
+        self.y = y
+        return
 
     def __repr__(self):
         return f'{{{self.x}, {self.y}}}'
 
 T = [ [] for i in range(52) ]
-for i in range(17):
-    for j in range(10):
-        coords = Coords()
-        T[i+1].append(coords)
+if True:
+    for i in range(1,52):
+        T[i] = [Coords(j*32,235) for j in range(19)]
+        T[i].append(Coords(65536,65536))
+else:
+    for i in range(17):
+        for j in range(10):
+            coords = Coords()
+            T[i+1].append(coords)
 
-        if (32 * i - 32 * j + 30 < 0):
-            coords.x = 65536
-        else:
-            coords.x = 32 * i - 32 * j + 25
-        
-        temp = int(235 + 32 * 1.73 * j)
-        if( temp > 480 ):
-            temp = 65536
-        coords.y = temp
-            
-        # Out of bounds in some way
-        if coords.x == 65536 or coords.y == 65536:
-            coords.x = 65536
-            coords.y = 65536
-            break
+            if (32 * i - 32 * j + 30 < 0):
+                coords.x = 65536
+            else:
+                coords.x = 32 * i - 32 * j + 25
 
-for i in range(17):
-    for j in range(10):
-        coords = Coords()
-        T[i+18].append(coords)
+            temp = int(235 + 32 * 1.73 * j)
+            if( temp > 480 ):
+                temp = 65536
+            coords.y = temp
 
-        if (32 * i - 32 * j + 30 < 0):
-            coords.x = 65536
-        else:
-            coords.x = 32 * i - 32 * j + 25
-        
-        temp = int(235 + 32 * 1.73 * j)
-        if( temp > 480 ):
-            temp = 65536
-        coords.y = temp
-            
-        # Out of bounds in some way
-        if coords.x == 65536 or coords.y == 65536:
-            coords.x = 65536
-            coords.y = 65536
-            break
+            # Out of bounds in some way
+            if coords.x == 65536 or coords.y == 65536:
+                coords.x = 65536
+                coords.y = 65536
+                break
 
-for i in range(17):
-    for j in range(10):
-        coords = Coords()
-        T[i+35].append(coords)
+    for i in range(17):
+        for j in range(10):
+            coords = Coords()
+            T[i+18].append(coords)
 
-        if (32 * i - 32 * j - 15 < 0):
-            coords.x = 65536
-        else:
-            coords.x = 32 * i - 32 * j - 15;
-        
-        temp = 235 + 32 * 1.73 * j;
-        if (temp > 480):
-            temp = 65536;
-        coords.y = int(temp);
+            if (32 * i - 32 * j + 30 < 0):
+                coords.x = 65536
+            else:
+                coords.x = 32 * i - 32 * j + 25
 
-        # Out of bounds in some way
-        if coords.x == 65536 or coords.y == 65536:
-            coords.x = 65536
-            coords.y = 65536
-            break
+            temp = int(235 + 32 * 1.73 * j)
+            if( temp > 480 ):
+                temp = 65536
+            coords.y = temp
+
+            # Out of bounds in some way
+            if coords.x == 65536 or coords.y == 65536:
+                coords.x = 65536
+                coords.y = 65536
+                break
+
+    for i in range(17):
+        for j in range(10):
+            coords = Coords()
+            T[i+35].append(coords)
+
+            if (32 * i - 32 * j - 15 < 0):
+                coords.x = 65536
+            else:
+                coords.x = 32 * i - 32 * j - 15;
+
+            temp = 235 + 32 * 1.73 * j;
+            if (temp > 480):
+                temp = 65536;
+            coords.y = int(temp);
+
+            # Out of bounds in some way
+            if coords.x == 65536 or coords.y == 65536:
+                coords.x = 65536
+                coords.y = 65536
+                break
 
 for i,body in enumerate(T):
     if i == 0: continue
