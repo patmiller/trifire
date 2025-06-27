@@ -27,6 +27,9 @@ jsonrun: json2json
 json2json: json2json.o state.o play.o sha1.o trajectory.o
 	$(CC) -o json2json $^
 
+json2bmp: json2bmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o trajectory.o bmp.o
+	$(CC) -o json2bmp $^
+
 .PHONY: tests
 TEST0='{"turn": 0, "rotation": 0, "cannon": 0, "cannon_t": 0, "cannon_offset": 0, "tri_x": 0, "coin_x": 0, "coin_y": 0}'
 ANSR0='{"turn": 25, "coin_x": 0, "rotation": 2, "cannon": 0, "tri_x": 192}'
