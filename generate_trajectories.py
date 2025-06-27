@@ -11,13 +11,13 @@ for i in range(17):
         coords = Coords()
         T[i+1].append(coords)
 
-        if (32 * i - 32 * j + 30 < 0):
+        if (32 * i - 32 * j + 25 < 0):
             coords.x = 65536
         else:
             coords.x = 32 * i - 32 * j + 25
         
-        temp = int(235 + 32 * 1.73 * j)
-        if( temp > 480 ):
+        temp = int(315 - 32 * 1.73 * j)
+        if( temp < 0 ):
             temp = 65536
         coords.y = temp
             
@@ -36,11 +36,7 @@ for i in range(17):
             coords.x = 65536
         else:
             coords.x = 32 * i - 32 * j + 25
-        
-        temp = int(235 + 32 * 1.73 * j)
-        if( temp > 480 ):
-            temp = 65536
-        coords.y = temp
+        coords.y = 315
             
         # Out of bounds in some way
         if coords.x == 65536 or coords.y == 65536:
@@ -56,12 +52,12 @@ for i in range(17):
         if (32 * i - 32 * j - 15 < 0):
             coords.x = 65536
         else:
-            coords.x = 32 * i - 32 * j - 15;
+            coords.x = 32 * i - 32 * j - 15
         
-        temp = 235 + 32 * 1.73 * j;
-        if (temp > 480):
-            temp = 65536;
-        coords.y = int(temp);
+        temp = 235 - 32 * 1.73 * j
+        if (temp < 0):
+            temp = 65536
+        coords.y = int(temp)
 
         # Out of bounds in some way
         if coords.x == 65536 or coords.y == 65536:
