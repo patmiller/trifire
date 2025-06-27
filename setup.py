@@ -13,7 +13,7 @@ my_module_extension = Extension(
 	     'sha1.c',
 	     'state.c',
              'ball.c',
-             'trajectories.c',
+             'trajectory.c',
     ],
     include_dirs = [os.getcwd()],
 )

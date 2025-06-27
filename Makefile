@@ -7,7 +7,8 @@ MSRC =  \
 	play.c \
 	render.c \
 	sha1.c \
-	state.c
+	state.c \
+	trajectory.o
 SRC = ${MSRC} main.c
 OBJ = ${SRC:.c=.o}
 HEADERS = ${shell ls ${MSRC:.c=.h}}
@@ -23,11 +24,11 @@ OTHER = \
 jsonrun: json2json
 	./json2json s '{"turn": 24, "coin_x": 0, "rotation": 1, "cannon": 0, "tri_x": 192}'
 
-json2json: json2json.o state.o play.o sha1.o
+json2json: json2json.o state.o play.o sha1.o trajectory.o
 	$(CC) -o json2json $^
 
 .PHONY: tests
-TEST0='{"turn": 24, "coin_x": 0, "rotation": 1, "cannon": 0, "tri_x": 192}'
+TEST0='{"turn": 0, "rotation": 0, "cannon": 0, "cannon_t": 0, "cannon_offset": 0, "tri_x": 0, "coin_x": 0, "coin_y": 0}'
 ANSR0='{"turn": 25, "coin_x": 0, "rotation": 2, "cannon": 0, "tri_x": 192}'
 tests: json2json
 	./json2json s $(TEST0) $(ANSR0)
@@ -51,7 +52,7 @@ movie.mp4: movie.py frame-1.bmp
 .PHONY: pytest
 pytest:
 	$(PYTHON) -m pip install .
-	$(PYTHON) pytest.py rrrrslslslrrrsss
+	$(PYTHON) pytest.py rrrrslslslrrrsssfrr
 
 .PHONY: clean
 clean:

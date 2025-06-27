@@ -20,6 +20,7 @@ state = trifire.init()
 print(json.dumps(state,indent=2))
 
 for command in COMMANDS:
+    print('run',command)
     state = trifire.play(state,command)
     print(state)
     if out is not None:

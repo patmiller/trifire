@@ -37,17 +37,17 @@ int render(uint32_t* area,
                penrose[state->rotation],
                PENROSE_WIDTH, PENROSE_HEIGHT,
                state->tri_x, 235) ) return 0;
+
   //check if the cannonball is active
-  if (state->cannon_t != 0){
+  if (state->cannon_t != 0) {
     //if cannon ball is active, we need to render it
-    if( trajectories[state->cannon_t][state->cannon_offset].x == 65536 ||
-        trajectories[state->cannon_t][state->cannon_offset].y == 65536){
-      state->cannon_t = 0;
-      state->cannon_offset = 0;
+    if (!sprite(area, area_width, area_height,
+		ball, BALL_WIDTH, BALL_HEIGHT,
+		trajectories[state->cannon_t][state->cannon_offset].x,
+		trajectories[state->cannon_t][state->cannon_offset].y)) {
       return 0;
     }
-    else if ( !sprite(area, area_width, area_height, ball, BALL_WIDTH, BALL_HEIGHT,
-              (unsigned)trajectories[state->cannon_t][state->cannon_offset].x, (unsigned)trajectories[state->cannon_t][state->cannon_offset].y)) return 0;
   }
+  
   return 1;
 }

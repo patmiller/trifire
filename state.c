@@ -31,13 +31,12 @@ static void get_state_pointers(struct keyvalue fields[NSTATE_FIELDS+1],
   // NSTATE_FIELDS count and the internal address must match
   fields[0].key = "\"turn\"";     fields[0].value = &(s->turn);
   fields[1].key = "\"rotation\""; fields[1].value = &(s->rotation);
-  fields[2].key = "\"cannon\"";   fields[2].value = &(s->cannon);
-  fields[3].key = "\"cannon_t\"";   fields[3].value = &(s->cannon_t);
-  fields[4].key = "\"cannon_offset\"";   fields[4].value = &(s->cannon_offset);
-  fields[5].key = "\"tri_x\"";    fields[5].value = &(s->tri_x);
-  fields[6].key = "\"coin_x\"";   fields[6].value = &(s->coin_x);
-  fields[7].key = "\"coin_y\"";   fields[7].value = &(s->coin_y);
-  fields[8].key = NULL;           fields[8].value = NULL;
+  fields[2].key = "\"cannon_t\"";   fields[2].value = &(s->cannon_t);
+  fields[3].key = "\"cannon_offset\"";   fields[3].value = &(s->cannon_offset);
+  fields[4].key = "\"tri_x\"";    fields[4].value = &(s->tri_x);
+  fields[5].key = "\"coin_x\"";   fields[5].value = &(s->coin_x);
+  fields[6].key = "\"coin_y\"";   fields[6].value = &(s->coin_y);
+  fields[7].key = NULL;           fields[7].value = NULL;
 }
 
 // Take a null-terminated string buffer (json dict as a string)
