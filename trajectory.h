@@ -5,8 +5,8 @@
 #define NTRAJECTORIES (52)
 
 typedef struct{
-  int32_t x;
-  int32_t y;
+  uint16_t x;
+  uint16_t y;
 } Coords;
 
 extern Coords traj1[];
@@ -60,4 +60,4 @@ extern Coords traj48[];
 extern Coords traj49[];
 extern Coords traj50[];
 extern Coords traj51[];
-extern Coords* trajectories[NTRAJECTORIES];
+extern const Coords* trajectories[NTRAJECTORIES];

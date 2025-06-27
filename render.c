@@ -17,12 +17,18 @@ int sprite(uint32_t* area,
            ) {
   for (unsigned j = 0; j < sprite_height; ++j) {
     for (unsigned i = 0; i < sprite_width; ++i) {
-      unsigned pixel = sprite[i + j*sprite_width];
-      unsigned xx = x + i;
-      unsigned yy = y + j;
-      if ( xx > area_width) return 0;
-      if ( yy > area_height ) return 0;
-      area[xx + yy*area_width] = pixel;
+	unsigned pixel = sprite[i + j*sprite_width];
+	if (pixel != 0xFFFFFF) {
+	  unsigned xx = x + i;
+	  unsigned yy = y + j;
+	  if ( xx > area_width) {
+	    return 0;
+	  }
+	  if ( yy > area_height ) {
+	    return 0;
+	  }
+	  area[xx + yy*area_width] = pixel;
+	}
     }
   }
   return 1;

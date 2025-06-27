@@ -41,15 +41,19 @@ int main(int argc, char** argv) {
 
 
   // Parse some state out of the json
-  if (!read_state_string(json, &state)) {
-    fprintf(stderr, "Invalid state json: %s\n", json);
-    return 1;
+  if (json[0]) {
+    if (!read_state_string(json, &state)) {
+      fprintf(stderr, "Invalid state json: %s\n", json);
+      return 1;
+    }
   }
 
   // See if we can play the game
-  if (!play(&state, command[0])) {
-    fprintf(stderr, "play failed\n");
-    return 1;
+  for(const char* cp = command; *cp; ++cp) {
+    if (!play(&state, *cp)) {
+      fprintf(stderr, "play failed\n");
+      return 1;
+    }
   }
 
   // Build the new json
