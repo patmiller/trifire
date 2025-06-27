@@ -5,6 +5,8 @@
 #include <stdint.h>
 
 #include "penrose.h"
+#include "ball.h"
+#include "trajectory.h"
 #include "state.h"
 
 int sprite(uint32_t* area,
@@ -18,7 +20,7 @@ int sprite(uint32_t* area,
       unsigned pixel = sprite[i + j*sprite_width];
       unsigned xx = x + i;
       unsigned yy = y + j;
-      if ( xx > area_width ) return 0;
+      if ( xx > area_width) return 0;
       if ( yy > area_height ) return 0;
       area[xx + yy*area_width] = pixel;
     }
@@ -35,6 +37,17 @@ int render(uint32_t* area,
                penrose[state->rotation],
                PENROSE_WIDTH, PENROSE_HEIGHT,
                state->tri_x, 235) ) return 0;
-
+  //check if the cannonball is active
+  if (cannon_t != 0){
+    //if cannon ball is active, we need to render it
+    if( trajectories[state->cannon_t][state->cannon_offset].x == 65536 ||
+        trajectories[state->cannon_t][state->cannon_offset].y == 65536){
+      state->cannon_t = 0;
+      state->cannon_offset = 0;
+      return 0;
+    }
+    else if ( !sprite(area, area_width, area_height, ball, BALL_WIDTH, BALL_HEIGHT,
+              (unsigned)trajectories[state->cannon_t][state->cannon_offset].x, (unsigned)trajectories[state->cannon_t][state->cannon_offset].y)) return 0;
+  }
   return 1;
 }
