@@ -10,6 +10,7 @@
 #include "render.h"
 #include "sha1.h"
 #include "state.h"
+#include "trajectory.h"
 
 
 
@@ -40,7 +41,7 @@ int play(struct State* state, char command) {
   } break;
   //Fire the trifire
   case 'f': {
-    if (state->cannon == 0) return 0; // No cannon to fire
+    if (state->cannon == 0 || state->cannon_t != 0) return 0; // No cannon to fire or cannon ball already in flight
     state->cannon--;
     //recoil on the x axis based on the rotation
     if (state->rotation == 0) {
@@ -71,22 +72,16 @@ int play(struct State* state, char command) {
     //Set cannon trajectory
     state->cannon_t = state->rotation * 17 + (state->tri_x / 32) + 1;
     //Spin the trifire regardless of whether or not we are able to move from the recoil we still spin
-    state->rotation = ( state->rotation + 1 )%3;
+    state->rotation = ( state->rotation + 1 ) % 3;
   } break;
   default: return 0;
   }
 
-  // We always advance state(check cannonball)
+  // We always advance state
   state->turn++;
-  if(state->cannon_t != 0) {
-    // If the cannonball is active, we need to update its position
-    if (state->cannon_offset < 9) {
-      state->cannon_offset++;
-    } else {
-      // Cannonball is done with trajectory
-      state->cannon_t = 0;
-      state->cannon_offset = 0;
-    }
+  if( cannon_t != 0 ) {
+    // If the cannonball is active update its position
+    state->cannon_offset++;
   }
   return 1;
 }

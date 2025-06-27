@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#define NTRAJECTORIES (52)
+
 typedef struct{
   int32_t x;
   int32_t y;
@@ -58,4 +60,4 @@ extern Coords traj48[10];
 extern Coords traj49[10];
 extern Coords traj50[10];
 extern Coords traj51[10];
-extern Coords* trajectories[52];
+extern Coords* trajectories[NTRAJECTORIES];

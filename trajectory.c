@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-uint32_t* trajectories[52] = {
+uint32_t* trajectories[NTRAJECTORIES] = {
     NULL,
     traj1, traj2, traj3, traj4, traj5,
     traj6, traj7, traj8, traj9, traj10,
@@ -18,10 +18,17 @@ uint32_t* trajectories[52] = {
 };
 
 for (unsigned i = 0; i < 17; ++i) {
-    for( unsigned j = 0; j < 10; ++j) {
+    for( unsigned j = 0; j < 10; ++j ) {
         Coords coords;
-        coords.x = 32 * i - 32 * j + 30;
-        double temp = 235 + 32 * 1.73 * j
+        if(32 * i - 32 * j + 30 < 0){
+            coords.x = 65536
+        } else {
+            coords.x = 32 * i - 32 * j + 25;
+        }
+        double temp = 235 + 32 * 1.73 * j;
+        if( temp > 480 ){
+            temp = 65536
+        }
         coords.y = int32_t(temp);
         trajectories[i+1][j] = coords;
     }
@@ -30,8 +37,12 @@ for (unsigned i = 0; i < 17; ++i) {
 for (unsigned i = 0; i < 17; ++i) {
     for( unsigned j = 0; j < 10; ++j) {
         Coords coords;
-        coords.x = 32 * i + 64 * j;
-        coords.y = 235;
+        if(32 * i + 64 * j + 90 > 640) {
+            coords.x = 65536;
+        } else {
+            coords.x = 32 * i + 64 * j + 90;
+        }
+        coords.y = 315;
         trajectories[i+18][j] = coords;
     }
 }
@@ -39,8 +50,15 @@ for (unsigned i = 0; i < 17; ++i) {
 for (unsigned i = 0; i < 17; ++i) {
     for( unsigned j = 0; j < 10; ++j) {
         Coords coords;
-        coords.x = 32 * i - 32 * j - 15;
+        if (32 * i - 32 * j - 15 < 0) {
+            coords.x = 65536;
+        } else {
+            coords.x = 32 * i - 32 * j - 15;
+        }
         double temp = 235 + 32 * 1.73 * j;
+        if (temp > 480) {
+            temp = 65536;
+        }
         coords.y = int32_t(temp);
         trajectories[i+35][j] = coords;
     }
