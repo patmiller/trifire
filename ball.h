@@ -1,3 +1,4 @@
+// Copyright 2025 - Patrick Miller
 #pragma once
 #include <stdint.h>
 

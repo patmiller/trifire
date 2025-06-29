@@ -13,6 +13,17 @@ class Coords:
     def __repr__(self):
         return f'{{{self.x}, {self.y}}}'
 
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __eq__(self,other):
+        return self.x == other.x and self.y == other.y
+
+    def __lt__(self,other):
+        if self.x < other.x: return True
+        if self.x == other.x and self.y < other.y: return True
+        return False
+
 # Each array starts with (0,0) so that we can just advance the offset
 # at the end of the play switch.  We move forward one position into
 # the first "real" (x,y) for the cannon ball.
@@ -76,6 +87,24 @@ for i,body in enumerate(T):
     updates += f'Coords traj{i}[] = {{\n  '
     updates += ',\n  '.join([str(x) for x in body])
     updates += "};\n"
+
+# The coins can only live where a cannon ball can get them
+coinset = set()
+for trajectory in T:
+    for coord in trajectory:
+        if coord.x == 0 and coord.y == 0: continue
+        if coord.x == 65535: continue
+        coinset.add(coord)
+coins = sorted(coinset)
+
+updates += f'const unsigned NCOINS = {len(coins)}u;\n'
+updates += 'const Coords coins[] = {\n'
+while coins:
+    row = coins[:4]
+    coins = coins[4:]
+    updates += '  '+(', '.join(str(x) for x in row))
+    updates += ',\n' if coins else '\n'
+updates += '};\n'
 
 CUT = '// -- %< ---\n'
 trajectory_c = open('trajectory.c').read()

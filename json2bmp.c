@@ -14,10 +14,10 @@ int main(int argc, char** argv) {
 
   // Simple command structure.  a.out command json bmpname
   if ( argc < 4 ) {
-    fprintf(stderr, "%s: command json bmpname\n",argv[0]);
+    fprintf(stderr, "%s: command json bmpname\n", argv[0]);
     return 1;
   }
-  
+
   const char* command = argv[1];
   const char* json = argv[2];
   const char* bmpfile = argv[3];
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
   }
 
   // See if we can play the game
-  for(const char* cp = command; *cp; ++cp) {
+  for (const char* cp = command; *cp; ++cp) {
     if (!play(&state, *cp)) {
       fprintf(stderr, "play failed\n");
       return 1;
