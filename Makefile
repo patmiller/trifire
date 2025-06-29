@@ -1,6 +1,11 @@
 # Copyright 2025 Patrick Miller
 PYTHON=python3
-SRC =  \
+CORE_SRC = \
+	state.c \
+	play.c \
+	sha1.c \
+	trajectory.c
+RENDER_SRC = \
 	ball.c \
 	bmp.c \
 	bricks.c \
@@ -8,11 +13,8 @@ SRC =  \
 	explosion.c \
 	penrose.c \
 	penrosecoin.c \
-	play.c \
-	render.c \
-	sha1.c \
-	state.c \
-	trajectory.c
+	render.c
+SRC = ${CORE_SRC} ${RENDER_SRC}
 OBJ = ${SRC:.c=.o}
 
 EXECUTABLES = \
@@ -26,6 +28,9 @@ jsonrun: json2json
 .PHONY: sources
 sources:
 	@echo $(SRC)
+
+.PHONY: all
+all: json2json json2bmp check_setup trifire.so
 
 json2json: json2json.o state.o play.o sha1.o trajectory.o
 	$(CC) -o json2json $^
@@ -50,14 +55,25 @@ check_setup:
 	done
 
 .PHONY: pytest
-pytest:
-	$(PYTHON) setup.py build
-	cp `find build -name "*.so"` .
+pytest: trifire.so setup.py ${SRC} ${SRC:.c=.h}
 	$(PYTHON) pytest.py rrrrslslslrrrsssfrr
 
+trifire.so: setup.py $(SRC)
+	$(PYTHON) setup.py build
+	cp `find build -name "*.so"` trifire.so
+
+CLEAN = \
+	${EXECUTABLES:=.o} \
+	${EXECUTABLES} \
+	${OBJ} \
+	*~ \
+	build \
+	movie.mp4 \
+	pytest.bmp \
+	trifire.so 
 .PHONY: clean
 clean:
-	rm -rf build trifire.so ${OBJ} ${EXECUTABLES} ${EXECUTABLES:=.o} *~
+	rm -rf $(CLEAN)
 
 # You can regenerate with % python depends.py
 bmp.o: bmp.c bmp.h
