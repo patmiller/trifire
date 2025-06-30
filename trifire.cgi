@@ -47,10 +47,13 @@ with db.cursor() as cur:
     try:
         cur.execute(sql)
         turn,state = cur.fetchone()
-    except:
-        print('Content-Type: text/html;charset=utf-8')
+    except Exception as e:
+        print("Status: 302 Found")
+        import urllib.parse
+
+        error = urllib.parse.quote(str(e))
+        print("Location: https://luxcedia.icu/trifire.html?error="+error)
         print()
-        print('db fetch?')
         sys.exit(0)
 
     state = ast.literal_eval(state)
@@ -59,6 +62,7 @@ with db.cursor() as cur:
     try:
         new_state = trifire.play(state,command[0])
     except RuntimeError as e:
+        
         print('Content-Type: text/html;charset=utf-8')
         print()
         print(state)

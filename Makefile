@@ -89,13 +89,17 @@ trajectory.o: trajectory.c trajectory.h
 
 # This is local to the Apache2 server on the machine (needs sudo)
 .PHONY: install_luxcedia
-install_luxcedia: clean
+install_luxcedia: trifire.so
 	$(PYTHON) setup.py build
 	chmod -x `find build -name "*.so"`
 	cp `find build -name "*.so"` /usr/lib/cgi-bin/trifire.so
 	cp trifire.html /var/www/html
 	cp trifire.cgi  /usr/lib/cgi-bin/trifire
 	chmod +x /usr/lib/cgi-bin/trifire
-	cp trifire.bmp trifire.mp4 /usr/lib/cgi-bin
+	cp left_button.png right_button.png /var/www/html/image
+	cp spin_button.png fire_button.png /var/www/html/image
+	cp explosion.png /var/www/html/image
+	cp trifire.bmp trifire.json trifire.mp4 /usr/lib/cgi-bin
 	chmod +x /usr/lib/cgi-bin/trifire.bmp
+	chmod +x /usr/lib/cgi-bin/trifire.json
 	chmod +x /usr/lib/cgi-bin/trifire.mp4

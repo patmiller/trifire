@@ -30,6 +30,7 @@ int play(struct State* state, char command) {
        == state->coin_x &&
        trajectories[state->cannon_t][state->cannon_offset].y
        == state->coin_y ) {
+    state->points += 1;  // Score!
     state->cannon_t = 0;
     state->cannon_offset = 0;
     state->coin_x = 0;
