@@ -19,7 +19,8 @@ OBJ = ${SRC:.c=.o}
 
 EXECUTABLES = \
 	json2bmp \
-	json2json
+	json2json \
+	showbmp
 
 .PHONY: jsonrun
 jsonrun: json2json
@@ -30,13 +31,16 @@ sources:
 	@echo $(SRC)
 
 .PHONY: all
-all: json2json json2bmp check_setup trifire.so
+all: $(EXECUTABLES) check_setup trifire.so
 
 json2json: json2json.o state.o play.o sha1.o trajectory.o
 	$(CC) -o json2json $^
 
 json2bmp: json2bmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o trajectory.o bmp.o penrosecoin.o explosion.o
 	$(CC) -o json2bmp $^
+
+showbmp: showbmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o trajectory.o bmp.o penrosecoin.o explosion.o
+	$(CC) -o showbmp $^
 
 .PHONY: tests
 ANSR0='{"turn": 1, "rotation": 1, "points": 0, "tri_x": 0, "cannon_t": 0, "cannon_offset": 0, "coin_x": 409, "coin_y": 164}'
