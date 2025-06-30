@@ -52,7 +52,7 @@ for i in range(17):
         coords = Coords()
         T[i+18].append(coords)
 
-        X = i*32 + j*32 + PENROSE_WIDTH
+        X = i * 32 + j * 32 + PENROSE_WIDTH
         Y = 300
         coords.x = X
         coords.y = Y
@@ -69,8 +69,8 @@ for i in range(17):
         coords = Coords()
         T[i+35].append(coords)
 
-        X = i*32
-        Y = int(315 + 32*1.73*j)
+        X = i * 32 - j * 32
+        Y = int(315 - 32 * 1.73 * j)
 
         coords.x = X
         coords.y = Y
