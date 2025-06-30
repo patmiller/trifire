@@ -97,6 +97,7 @@ int play(struct State* state, char command) {
     // Kill the cannon ball if we have gone offscreen
     if (trajectories[state->cannon_t][state->cannon_offset].x == 65535) {
       state->cannon_t = 0;
+      state->cannon_offset = 0;
     }
   }
   return 1;
