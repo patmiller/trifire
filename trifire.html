@@ -1,21 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>TRIFIRE game</title>
+  <link rel="icon" href="image/trifire_icon.png" type="image/png">
+
+  <style>
+    .framed-image {
+      border: 5px solid #333; /* thickness, style, color */
+      padding: 10px;          /* optional space inside the border */
+      display: inline-block;  /* to fit the image size */
+    }
+  </style>
 </head>
+
+<html>
 <body>
+  <script>
+    // Grab the URL parameters
+    const params = new URLSearchParams(window.location.search);
 
-  <h2>Enter a Command</h2>
+    // Get the value of "error"
+    const error = params.get('error');
 
+    // Display it if it exists
+    if (error) {
+      document.getElementById('error-message').textContent = error;
+    } else {
+      document.getElementById('error-message').textContent = 'No error message found.';
+    }
+    document
+  </script>
+
+This game is a simple 1FAAT (1 frame at a time) game.  The clock only moves
+when a command is entered: left, spin, fire, and right.
+
+The Penrose impossible triangle has 3 (impossible) sides that we call the "trifire".
+The red side is a cannon.
+It will shoot a little cannon ball out in the direction it points.
+When you do that, the triangle will spin AND recoil based on the direction
+of the red gun barrel.
+
+Right now, the cannon balls leave the playing field (we're adding bounce physics).
+Every coin can be reached from some x location of the trifire and some orientation
+so you may have to translate the trifire AND spin it into the right location.
+
+You need to actively do something whilst the ball is in flight (remember, 1 frame
+at a time).  Spinning works.  You can't fire again until the ball leaves the
+playing field or you hit the coin.
+
+If you do manage to hit it, you will score a point and get a satisfying explosion.<br>
+<img src="image/explosion.png" alt="explosion"><br>
+<br>
+Then a new coin is rendered that you can try and destroy.<br>
+There is nothing that kills you, you just scoot and shoot!<br>
+<br>
+  
   <form action="/cgi-bin/trifire" method="get">
-    <img src="/cgi-bin/trifire.bmp" alt="trifire" type="image/bmp" width="640"><br><br>
+    <img src="/cgi-bin/trifire.bmp" alt="trifire"
+	 type="image/bmp"
+	 width="640"
+	 class="framed-image"
+	 ><br><br>
 
-    <label for="command">Command:</label>
-    <input type="text" id="command" name="command"><br><br>
-
-    <input type="submit" value="Submit">
+  <button type="submit" name="command" value="l">
+    <img src="image/left_button.png" alt="Left">
+  </button>
+  <button type="submit" name="command" value="s">
+    <img src="image/spin_button.png" alt="Spin">
+  </button>
+  <button type="submit" name="command" value="f">
+    <img src="image/fire_button.png" alt="Fire">
+  </button>
+  <button type="submit" name="command" value="r">
+    <img src="image/right_button.png" alt="Right">
+  </button>
   </form>
 
+<br>
+With each command that is entered, the game evolves one turn and we get a new 8
+word state.  It is that state which is rendered into the .bmp image you see below.
+<br>
+The current state is:
+<br>
+  <table id="myTable" border="1"></table>
+  <div id="error" style="color: red;"></div>
+
+  <script>
+    fetch('./cgi-bin/trifire.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('HTTP error: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const arr = Object.entries(data).map(([key, value]) => ({ key, value }));
+        const table = document.getElementById("myTable");
+
+        // Clear table
+        table.innerHTML = '';
+
+        // Create header
+        const header = table.insertRow();
+        const headerKey = header.insertCell();
+        const headerValue = header.insertCell();
+        headerKey.textContent = "Key";
+        headerValue.textContent = "Value";
+
+        // Add rows
+        arr.forEach(item => {
+          const row = table.insertRow();
+          const cellKey = row.insertCell();
+          const cellValue = row.insertCell();
+          cellKey.textContent = item.key;
+          cellValue.textContent = item.value;
+          cellValue.style.textAlign = 'right';
+        });
+      })
+      .catch(error => {
+        document.getElementById("error").textContent = "Error: " + error;
+      });
+  </script>
 </body>
 </html>

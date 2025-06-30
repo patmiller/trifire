@@ -1,10 +1,11 @@
+// Copyright 2025 Patrick Miller
 #pragma once
 
 #include <stdint.h>
 
 #define NTRAJECTORIES (52)
 
-typedef struct{
+typedef struct {
   uint16_t x;
   uint16_t y;
 } Coords;
@@ -61,3 +62,5 @@ extern Coords traj49[];
 extern Coords traj50[];
 extern Coords traj51[];
 extern const Coords* trajectories[NTRAJECTORIES];
+extern const unsigned NCOINS;
+extern const Coords coins[];

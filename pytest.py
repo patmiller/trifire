@@ -31,12 +31,9 @@ for command in COMMANDS:
         out.write(frame_bgr)
 print(json.dumps(state,indent=2))
 
-rgb = trifire.render(state)
-print(rgb[:8])
-
 bmp = trifire.bmp(state)
-open('foo.bmp','wb').write(bmp)
-os.system('open foo.bmp')
+open('pytest.bmp','wb').write(bmp)
+os.system('open pytest.bmp')
 
 if out is not None:
     out.release()

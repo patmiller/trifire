@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
   }
 
   // See if we can play the game
-  for(const char* cp = command; *cp; ++cp) {
+  for (const char* cp = command; *cp; ++cp) {
     if (!play(&state, *cp)) {
       fprintf(stderr, "play failed\n");
       return 1;
