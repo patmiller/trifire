@@ -50,7 +50,7 @@ showbmp: showbmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o traj
 	$(CC) -o showbmp $^
 
 .PHONY: tests
-ANSR0='{"turn": 1, "rotation": 1, "points": 0, "tri_x": 0, "cannon_t": 0, "cannon_offset": 0, "coin_x": 409, "coin_y": 164}'
+ANSR0='{"turn": 1, "points": 0, "tri_x": 0, "rotation": 1, "cannon_t": 0, "cannon_offset": 0, "coin_x": 409, "coin_y": 164}'
 tests: json2json
 	./json2json s '' $(ANSR0)
 
