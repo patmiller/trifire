@@ -20,6 +20,7 @@ OBJ = ${SRC:.c=.o}
 EXECUTABLES = \
 	json2bmp \
 	json2json \
+	playcheck \
 	showbmp
 
 .PHONY: jsonrun
@@ -38,6 +39,12 @@ json2json: json2json.o state.o play.o sha1.o trajectory.o
 
 json2bmp: json2bmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o trajectory.o bmp.o penrosecoin.o explosion.o
 	$(CC) -o json2bmp $^
+
+playcheck: playcheck.o monolith.o
+	$(CC) -o playcheck $^
+
+monolith.c: ${CORE_SRC:.c=.h} $(CORE_SRC)
+	cat $^ | grep -v '#pragma once' | grep -v '#include "' > monolith.c
 
 showbmp: showbmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o trajectory.o bmp.o penrosecoin.o explosion.o
 	$(CC) -o showbmp $^
@@ -74,6 +81,8 @@ CLEAN = \
 	build \
 	movie.mp4 \
 	pytest.bmp \
+	monolith.c \
+	monolith.o \
 	trifire.so 
 .PHONY: clean
 clean:

@@ -10,7 +10,7 @@
 #include "trajectory.h"
 
 // We get random numbers by taking the SHA1 hash of the state
-static int random(struct State* state) {
+static int random_from_state(struct State* state) {
     uint8_t digest[20];
     SHA1(digest, state, sizeof(struct State));
 
@@ -39,7 +39,7 @@ int play(struct State* state, char command) {
 
   // With no coin, we add one
   if (state->coin_x == 0 && state->coin_y == 0) {
-    int randint = random(state);
+    int randint = random_from_state(state);
     if (randint < 0) randint = -randint;
     int coin = randint%NCOINS;
     state->coin_x = coins[coin].x;
@@ -71,7 +71,7 @@ int play(struct State* state, char command) {
 
     // We get random numbers by taking the SHA1 hash of the state
     // We can use the first 4 bytes of the digest to determine the next action
-    int randint = random(state);
+    int randint = random_from_state(state);
 
     // Set cannon trajectory before the recoil
     state->cannon_t = state->rotation * 17 + (state->tri_x / 32) + 1;
@@ -129,4 +129,36 @@ int play(struct State* state, char command) {
     }
   }
   return 1;
+}
+
+// This is just for the monolith version (swift interface)
+int playlong(
+	     char command,
+	     long* turn,
+	     long* points,
+	     long* tri_x,
+	     long* rotation,
+	     long* coin_x,
+	     long* coin_y,
+	     long* cannon_t,
+	     long* cannon_offset) {
+  struct State state;
+  state.turn = *turn;
+  state.points = *points;
+  state.tri_x = *tri_x;
+  state.rotation = *rotation;
+  state.coin_x = *coin_x;
+  state.coin_y = *coin_y;
+  state.cannon_t = *cannon_t;
+  state.cannon_offset = *cannon_offset;
+  int result = play(&state,command);
+  *turn = state.turn;
+  *points = state.points;
+  *tri_x = state.tri_x;
+  *rotation = state.rotation;
+  *coin_x = state.coin_x;
+  *coin_y = state.coin_y;
+  *cannon_t = state.cannon_t;
+  *cannon_offset = state.cannon_offset;
+  return result;
 }
