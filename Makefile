@@ -43,7 +43,7 @@ json2bmp: json2bmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o tr
 playcheck: playcheck.o monolith.o
 	$(CC) -o playcheck $^
 
-monolith.c: ${CORE_SRC:.c=.h} $(CORE_SRC)
+monolith.c: ${SRC:.c=.h} $(SRC)
 	cat $^ | grep -v '#pragma once' | grep -v '#include "' > monolith.c
 
 showbmp: showbmp.o bricks.o render.o ball.o penrose.o state.o play.o sha1.o trajectory.o bmp.o penrosecoin.o explosion.o
@@ -99,6 +99,10 @@ render.o: render.c ball.h explosion.h penrose.h penrosecoin.h render.h state.h t
 sha1.o: sha1.c sha1.h
 state.o: state.c state.h
 trajectory.o: trajectory.c trajectory.h
+
+# We build trajectories from our generator
+trajectory.c: generate_trajectories.py
+	$(PYTHON) generate_trajectories.py trajectory.c
 
 # This is local to the Apache2 server on the machine (needs sudo)
 .PHONY: install_luxcedia

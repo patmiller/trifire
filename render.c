@@ -3,8 +3,10 @@
 #include "render.h"
 
 #include <stdint.h>
+#include <string.h>
 
 #include "ball.h"
+#include "bricks.h"
 #include "explosion.h"
 #include "penrose.h"
 #include "penrosecoin.h"
@@ -91,4 +93,28 @@ int render(uint32_t* area,
   }
 
   return 1;
+}
+
+int renderlong(int* area,
+	       unsigned area_width, unsigned area_height,
+	       long* state_array) {
+  struct State state;
+  array_to_state(state_array, &state);
+  
+  memcpy(area, bricks, area_width*area_height*sizeof(int));
+  int result = render((uint32_t*)area, area_width, area_height, &state);
+
+  // This creates a BGR with full alpha from an RGB
+  for(int i=0;i<area_width*area_height;++i) {
+    uint32_t px = area[i];
+    uint32_t alpha = 0xff;
+    uint32_t red = (px & 0xff0000) >> 16;
+    uint32_t green = (px & 0xff00) >> 8;
+    uint32_t blue = (px & 0xff);
+    area[i] = (alpha << 24) | (blue << 16) | (green << 8) | red;
+  }
+  
+  state_to_array(state_array, &state);
+  return result;
+
 }

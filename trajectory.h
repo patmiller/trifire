@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-#define NTRAJECTORIES (52)
+// 18 positions, 3 orientations, plus one null trajectory
+#define NTRAJECTORIES (3*18+1)
 
 typedef struct {
   uint16_t x;

@@ -154,3 +154,31 @@ int read_state(FILE* fp, struct State* s) {
 
   return 1;
 }
+
+void array_to_state(long* state_array, struct State* state) {
+  state->turn          = state_array[0];
+  state->points        = state_array[1];
+  state->tri_x         = state_array[2];
+  state->rotation      = state_array[3];
+  state->coin_x        = state_array[4];
+  state->coin_y        = state_array[5];
+  state->cannon_t      = state_array[6];
+  state->cannon_offset = state_array[7];
+#if NSTATE_FIELDS != 8
+#error Update
+#endif
+}
+
+void state_to_array(long* state_array, struct State* state) {
+  state_array[0] = state->turn;
+  state_array[1] = state->points;
+  state_array[2] = state->tri_x;
+  state_array[3] = state->rotation;
+  state_array[4] = state->coin_x;
+  state_array[5] = state->coin_y;
+  state_array[6] = state->cannon_t;
+  state_array[7] = state->cannon_offset;
+#if NSTATE_FIELDS != 8
+#error Update
+#endif
+}

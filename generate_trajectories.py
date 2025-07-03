@@ -5,7 +5,7 @@ PENROSE_HEIGHT = 80
 PENROSE_WIDTH = 88
 
 class Coords:
-    def __init__(self,x=None,y=None):
+    def __init__(self,x=65535,y=65535):
         self.x = x
         self.y = y
         return
@@ -27,59 +27,36 @@ class Coords:
 # Each array starts with (0,0) so that we can just advance the offset
 # at the end of the play switch.  We move forward one position into
 # the first "real" (x,y) for the cannon ball.
-T = [ [] for i in range(52) ]
-for i in range(17):
-    T[i+1].append(Coords(0,0))
-    for j in range(10):
-        coords = Coords()
-        T[i+1].append(coords)
+T = [ [] for i in range(18*3+1) ]
+XSTEP = 32
+YSTEP = XSTEP*1.73
+ZERO = 300
+deltas = [(-XSTEP,-YSTEP), (XSTEP,0), (-XSTEP,-YSTEP)]
+xy = [(PENROSE_WIDTH//2-7,-PENROSE_HEIGHT),(PENROSE_WIDTH+8,0),(0,0)]
+for i,body in enumerate(T):
+    if i == 0: continue
+    rotation = (i-1)//18
+    step = (i-1)%18
+    if step == 0: print()
+    body.append(Coords(0,0))
 
-        X = 32 * i - 32 * j + 25
-        coords.x = X
-
-        Y = int(300 - PENROSE_HEIGHT - 32 * 1.73 * j)
-        coords.y = Y
-
-        # Out of bounds in some way
-        if coords.x < 0 or coords.x >= 640 or coords.y < 0 or coords.y >= 480:
-            coords.x = 65535
-            coords.y = 65535
+    dx,dy = deltas[rotation]
+    x0,y0 = xy[rotation]
+    x0 += step*XSTEP
+    y0 += ZERO
+    if x0 < 640:
+        body.append(Coords(x0,y0))
+    while True:
+        x0 += dx
+        y0 = int(y0 + dy)
+        if x0 < 0 or x0 >= 640:
             break
-
-for i in range(17):
-    T[i+17].append(Coords(0,0))
-    for j in range(10):
-        coords = Coords()
-        T[i+18].append(coords)
-
-        X = i * 32 + j * 32 + PENROSE_WIDTH
-        Y = 300
-        coords.x = X
-        coords.y = Y
-
-        # Out of bounds in some way
-        if coords.x < 0 or coords.x >= 640 or coords.y < 0 or coords.y >= 480:
-            coords.x = 65535
-            coords.y = 65535
+        if y0 < 0 or y0 >= 480:
             break
+        if x0 == 640: xx
+        body.append(Coords(x0,y0))
 
-for i in range(17):
-    T[i+35].append(Coords(0,0))
-    for j in range(10):
-        coords = Coords()
-        T[i+35].append(coords)
-
-        X = i * 32 - j * 32
-        Y = int(315 - 32 * 1.73 * j)
-
-        coords.x = X
-        coords.y = Y
-
-        # Out of bounds in some way
-        if coords.x < 0 or coords.x >= 640 or coords.y < 0 or coords.y >= 480:
-            coords.x = 65535
-            coords.y = 65535
-            break
+    body.append(Coords())
 
 updates = ''
 for i,body in enumerate(T):

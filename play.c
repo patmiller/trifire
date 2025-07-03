@@ -8,6 +8,7 @@
 #include "sha1.h"
 #include "state.h"
 #include "trajectory.h"
+#include "penrose.h"
 
 // We get random numbers by taking the SHA1 hash of the state
 static int random_from_state(struct State* state) {
@@ -53,9 +54,9 @@ int play(struct State* state, char command) {
   } break;
 
   case 'r': case 'R': {
-    // translate right
+    // translate right (watch boundary)
+    if (state->tri_x + 32 + PENROSE_WIDTH >= 640) return 0;
     state->tri_x += 32;
-    if (state->tri_x >= 640) return 0;
   } break;
 
   case 'l': case 'L': {
@@ -74,8 +75,9 @@ int play(struct State* state, char command) {
     int randint = random_from_state(state);
 
     // Set cannon trajectory before the recoil
-    state->cannon_t = state->rotation * 17 + (state->tri_x / 32) + 1;
-
+    state->cannon_t = state->rotation * 18 + (state->tri_x / 32) + 1;
+    printf("X is %ld use trajectory %ld\n",state->tri_x, state->cannon_t);
+    
     // Recoil on the x axis based on the rotation
     if (state->rotation == 0) {
       // Move the trifire to the right a little bit
@@ -132,33 +134,24 @@ int play(struct State* state, char command) {
 }
 
 // This is just for the monolith version (swift interface)
-int playlong(
-	     char command,
-	     long* turn,
-	     long* points,
-	     long* tri_x,
-	     long* rotation,
-	     long* coin_x,
-	     long* coin_y,
-	     long* cannon_t,
-	     long* cannon_offset) {
+int playlong(char command,long* state_array) {
   struct State state;
-  state.turn = *turn;
-  state.points = *points;
-  state.tri_x = *tri_x;
-  state.rotation = *rotation;
-  state.coin_x = *coin_x;
-  state.coin_y = *coin_y;
-  state.cannon_t = *cannon_t;
-  state.cannon_offset = *cannon_offset;
+  array_to_state(state_array, &state);
+
   int result = play(&state,command);
-  *turn = state.turn;
-  *points = state.points;
-  *tri_x = state.tri_x;
-  *rotation = state.rotation;
-  *coin_x = state.coin_x;
-  *coin_y = state.coin_y;
-  *cannon_t = state.cannon_t;
-  *cannon_offset = state.cannon_offset;
+
+  state_to_array(state_array, &state);
+
+  // We want to return 2 if we will render an explosion
+  // here
+  if (result && state.cannon_t != 0) {
+    unsigned ball_x = trajectories[state.cannon_t][state.cannon_offset].x;
+    unsigned ball_y = trajectories[state.cannon_t][state.cannon_offset].y;
+    // If the cannon ball has hit the coin, we only draw an explosion
+    if (ball_x == state.coin_x && ball_y == state.coin_y) {
+      return 2;
+    }
+  }
+
   return result;
 }
