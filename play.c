@@ -76,7 +76,6 @@ int play(struct State* state, char command) {
 
     // Set cannon trajectory before the recoil
     state->cannon_t = state->rotation * 18 + (state->tri_x / 32) + 1;
-    printf("X is %ld use trajectory %ld\n",state->tri_x, state->cannon_t);
     
     // Recoil on the x axis based on the rotation
     if (state->rotation == 0) {
