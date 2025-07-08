@@ -4,8 +4,8 @@
 
 // Remember to update the state reader/writer in state.c
 // and to fix get_state_pointers() for these fields
-#define DEFAULT_STATE { 0, 0, 0, 0, 0, 0, 0, 0 }
-#define NSTATE_FIELDS (8)  // There are 8 fields in the State struct
+#define DEFAULT_STATE { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+#define NSTATE_FIELDS (9)  // There are 9 fields in the State struct
 struct State {
   long turn;             // 0
   long points;           // 1
@@ -15,6 +15,7 @@ struct State {
   long coin_y;           // 5
   long cannon_t;         // 6
   long cannon_offset;    // 7
+  long num_votes;        // 8
 };
 
 extern int read_state_string(const char* buffer, struct State* s);

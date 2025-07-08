@@ -1,12 +1,14 @@
 #include "voting.h"
+#include "state.h"
 
-
-extern char countVotes(Vote votes[], int numVotes){
+// Will need an if statement before this function is called to ensure
+// that we have a valid number of votes
+extern char countVotes(Vote votes[], struct State* state){
     int Rcount = 0;
     int Lcount = 0;
     int Scount = 0;
     int Fcount = 0;
-    for (int i = 0; i < numVotes; i++) {
+    for (int i = 0; i < state->num_votes; i++) {
         if (votes[i].vote == 'R' || votes[i].vote == 'r') {
             Rcount++;
         } else if (votes[i].vote == 'L' || votes[i].vote == 'l') {

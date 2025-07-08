@@ -1,8 +1,10 @@
 #pragma once
 
 #include <stdint.h>
+#include <math.h>
+
 #define MAX_PLAYERS (10)
-#define voteThreshold (0.75 * MAX_PLAYERS)
+#define voteThreshold int((ceil(0.75 * MAX_PLAYERS)))
 
 typedef struct{
     char vote;
@@ -11,4 +13,4 @@ typedef struct{
 
 extern Vote votes[MAX_PLAYERS];
 
-extern char countVotes(Vote votes[], int numVotes);
+extern char countVotes(Vote votes[], struct State* state);
