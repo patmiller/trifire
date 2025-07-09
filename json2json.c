@@ -6,6 +6,7 @@
 
 #include "play.h"
 #include "state.h"
+#include "voting.h"
 
 int first_difference(const char *s1, const char *s2) {
     int i = 0;
@@ -44,18 +45,17 @@ int main(int argc, char** argv) {
   if (json[0]) {
     if (!read_state_string(json, &state)) {
       fprintf(stderr, "Invalid state json: %s\n", json);
-      return 1;
+      return 1; 
     }
   }
-
-  // See if we can play the game
-  for (const char* cp = command; *cp; ++cp) {
-    if (!play(&state, *cp)) {
+  //enough votes?
+  if (state.num_votes > voteThreshold) {
+    // See if we can play the game
+    if (!play(&state, countVotes(votes, &state))) {
       fprintf(stderr, "play failed\n");
       return 1;
     }
   }
-
   // Build the new json
   if (!string_state(&state, response, sizeof(response))) {
     fprintf(stderr, "json packing failed\n");

@@ -4,7 +4,7 @@
 #include <math.h>
 
 #define MAX_PLAYERS (10)
-#define voteThreshold int((ceil(0.75 * MAX_PLAYERS)))
+extern int voteThreshold = (int)(ceil(0.75 * MAX_PLAYERS));
 
 typedef struct{
     char vote;
