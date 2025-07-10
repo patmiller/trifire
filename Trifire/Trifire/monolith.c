@@ -97,6 +97,9 @@ extern Coords traj48[];
 extern Coords traj49[];
 extern Coords traj50[];
 extern Coords traj51[];
+extern Coords traj52[];
+extern Coords traj53[];
+extern Coords traj54[];
 extern const Coords* trajectories[NTRAJECTORIES];
 extern const unsigned NCOINS;
 extern const Coords coins[];
@@ -421,7 +424,6 @@ int play(struct State* state, char command) {
 
     // Set cannon trajectory before the recoil
     state->cannon_t = state->rotation * 18 + (state->tri_x / 32) + 1;
-    printf("X is %ld use trajectory %ld\n",state->tri_x, state->cannon_t);
     
     // Recoil on the x axis based on the rotation
     if (state->rotation == 0) {
@@ -500,6 +502,37 @@ int playlong(char command,long* state_array) {
 
   return result;
 }
+
+int ncoins(void) {
+  return NCOINS;
+}
+
+int findtraj(int x, int y) {
+  for (int i = 1; i < NTRAJECTORIES; ++i) {
+    int j = 0;
+    while(trajectories[i][j].x != 65535) {
+      if ( trajectories[i][j].x == x && trajectories[i][j].y == y ) {
+	return i;
+      }
+      ++j;
+    }
+  }
+  return -1;
+}
+
+int setcoin(int c, long* state_array) {
+  struct State state;
+  array_to_state(state_array, &state);
+
+  state.coin_x = coins[c].x;
+  state.coin_y = coins[c].y;
+
+  state_to_array(state_array, &state);
+
+  return findtraj(coins[c].x, coins[c].y);
+}
+
+ 
 // Copyright (none)
 //  portable, public-domain C implementation of SHA-1, based on FIPS PUB 180-1
 
@@ -58691,10 +58724,10 @@ int render(uint32_t* area,
       // Draw the cannon ball and the coin
       // Coin
       if (!sprite(area, area_width, area_height,
-                  penrosecoin, PENROSECOIN_WIDTH, PENROSECOIN_HEIGHT,
-                  state->coin_x-PENROSECOIN_WIDTH/2,
-                  state->coin_y-PENROSECOIN_HEIGHT/2)) {
-        return 0;
+		  penrosecoin, PENROSECOIN_WIDTH, PENROSECOIN_HEIGHT,
+		  state->coin_x-PENROSECOIN_WIDTH/2,
+		  state->coin_y-PENROSECOIN_HEIGHT/2)) {
+	return 0;
       }
 
       // Cannon ball
@@ -58706,7 +58739,7 @@ int render(uint32_t* area,
       }
     }
 
-  } else if (state->coin_x > 0 && state->coin_y > 0) {
+  } else if (state->coin_x || state->coin_y) {
     // If only the coin is active, draw it
     // Coin
     if (!sprite(area, area_width, area_height,

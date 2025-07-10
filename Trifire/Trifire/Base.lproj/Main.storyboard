@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="landscape" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -54,15 +55,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9kh-Pb-qlo">
+                                <rect key="frame" x="398" y="308" width="56" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Hint"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yv5-Qk-b6m">
+                                <rect key="frame" x="53.666666666666657" y="301" width="35" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To go" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yg-IH-xMt">
+                                <rect key="frame" x="759.66666666666663" y="301" width="43" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="3Yg-IH-xMt" firstAttribute="centerX" secondItem="gKy-vf-JVl" secondAttribute="centerX" id="2Sl-t3-66y"/>
+                            <constraint firstItem="Yv5-Qk-b6m" firstAttribute="centerX" secondItem="ZFk-gO-J3K" secondAttribute="centerX" id="307-cC-A23"/>
                             <constraint firstItem="PPR-Vn-dEh" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3Jx-NH-pz0"/>
                             <constraint firstItem="2Pc-qI-2Hg" firstAttribute="top" secondItem="PPR-Vn-dEh" secondAttribute="top" id="3eR-cw-QS5"/>
+                            <constraint firstItem="Yv5-Qk-b6m" firstAttribute="top" secondItem="ZFk-gO-J3K" secondAttribute="bottom" constant="8" symbolic="YES" id="4D9-jJ-Koy"/>
                             <constraint firstAttribute="bottom" secondItem="ZFk-gO-J3K" secondAttribute="bottom" constant="100" id="4WR-cz-oEg"/>
                             <constraint firstItem="ZFk-gO-J3K" firstAttribute="centerX" secondItem="XlM-rZ-uiC" secondAttribute="centerX" id="5gb-ek-Fac"/>
+                            <constraint firstAttribute="bottom" secondItem="9kh-Pb-qlo" secondAttribute="bottom" constant="50" id="8Pc-Ft-SLc"/>
                             <constraint firstItem="upg-QV-irP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="QtI-d4-aNu"/>
+                            <constraint firstItem="3Yg-IH-xMt" firstAttribute="top" secondItem="Yv5-Qk-b6m" secondAttribute="top" id="SCK-QY-biN"/>
                             <constraint firstItem="Tuf-cF-h1T" firstAttribute="top" secondItem="XlM-rZ-uiC" secondAttribute="top" id="SSQ-qN-kun"/>
                             <constraint firstItem="gKy-vf-JVl" firstAttribute="centerX" secondItem="Tuf-cF-h1T" secondAttribute="centerX" id="Sd0-oy-vQu"/>
                             <constraint firstItem="upg-QV-irP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Wog-1T-7FW"/>
@@ -73,6 +96,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PPR-Vn-dEh" secondAttribute="trailing" id="f5o-Wz-yTO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Tuf-cF-h1T" secondAttribute="trailing" id="fbg-cF-nvy"/>
                             <constraint firstAttribute="bottom" secondItem="gKy-vf-JVl" secondAttribute="bottom" constant="100" id="nxj-lT-g9Z"/>
+                            <constraint firstItem="9kh-Pb-qlo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tvM-gJ-efe"/>
                             <constraint firstItem="upg-QV-irP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="wgO-LO-Q1b"/>
                             <constraint firstItem="2Pc-qI-2Hg" firstAttribute="centerX" secondItem="XlM-rZ-uiC" secondAttribute="centerX" id="znX-rs-CEk"/>
                         </constraints>
@@ -80,6 +104,7 @@
                     <connections>
                         <outlet property="fireButton" destination="PPR-Vn-dEh" id="JMi-Xd-OOG"/>
                         <outlet property="gamescreen" destination="upg-QV-irP" id="LAw-LV-5eT"/>
+                        <outlet property="hintButton" destination="9kh-Pb-qlo" id="KeK-On-o91"/>
                         <outlet property="leftButton" destination="XlM-rZ-uiC" id="nGN-y5-Qkt"/>
                         <outlet property="rightButton" destination="Tuf-cF-h1T" id="szC-W9-X6N"/>
                         <outlet property="scoreLabel" destination="gKy-vf-JVl" id="une-qS-8lA"/>

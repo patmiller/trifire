@@ -154,3 +154,34 @@ int playlong(char command,long* state_array) {
 
   return result;
 }
+
+int ncoins() {
+  return NCOINS;
+}
+
+int findtraj(int x, int y) {
+  for (int i = 1; i < NTRAJECTORIES; ++i) {
+    int j = 0;
+    while(trajectories[i][j].x != 65535) {
+      if ( trajectories[i][j].x == coins[c].x && trajectories[i][j].y == coins[c].y ) {
+	return i;
+      }
+      ++j;
+    }
+  }
+  return -1;
+}
+
+int setcoin(int c, long* state_array) {
+  struct State state;
+  array_to_state(state_array, &state);
+
+  state.coin_x = coins[c].x;
+  state.coin_y = coins[c].y;
+
+  state_to_array(state_array, &state);
+
+  return findtraj(coins[c].x, coins[c].y);
+}
+
+ 

@@ -66,10 +66,10 @@ int render(uint32_t* area,
       // Draw the cannon ball and the coin
       // Coin
       if (!sprite(area, area_width, area_height,
-                  penrosecoin, PENROSECOIN_WIDTH, PENROSECOIN_HEIGHT,
-                  state->coin_x-PENROSECOIN_WIDTH/2,
-                  state->coin_y-PENROSECOIN_HEIGHT/2)) {
-        return 0;
+		  penrosecoin, PENROSECOIN_WIDTH, PENROSECOIN_HEIGHT,
+		  state->coin_x-PENROSECOIN_WIDTH/2,
+		  state->coin_y-PENROSECOIN_HEIGHT/2)) {
+	return 0;
       }
 
       // Cannon ball
@@ -81,7 +81,7 @@ int render(uint32_t* area,
       }
     }
 
-  } else if (state->coin_x > 0 && state->coin_y > 0) {
+  } else if (state->coin_x || state->coin_y) {
     // If only the coin is active, draw it
     // Coin
     if (!sprite(area, area_width, area_height,

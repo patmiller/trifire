@@ -25,7 +25,7 @@ def solve(x,y):
                     state = trifire.play(state,'s')
                     if state['points'] != 0:
                         #print('solved',(x,y),i,j,k,state)
-                        print((x,y),i*'r'+'s'*j + 'f')
+                        print(f'({x},{y})'+i*'r'+'s'*j + 'f') #,'\tposition =',i,'spin = ',j)
                         return
                 
                 
@@ -33,6 +33,7 @@ def solve(x,y):
 m = re.search(r'coins\[\]\s+=\s+\{(.*?)\};',open('trajectory.c').read(),re.DOTALL)
 definition = m.group(1)
 coins = [(int(m.group(1)),int(m.group(2))) for m in re.finditer(r'(\d+),\s+(\d+)',definition)]
+print(len(coins),'unique coins')
 for x,y in coins:
     solve(x,y)
          
