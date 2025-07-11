@@ -52,6 +52,9 @@ static void get_state_pointers(struct keyvalue fields[NSTATE_FIELDS+1],
 
   fields[7].key = "\"coin_y\"";
   fields[7].value = &(s->coin_y);
+  
+  fields[8].key = "\"num_votes\"";
+  fields[8].value = &(s->num_votes);
 
   fields[NSTATE_FIELDS].key = NULL;
   fields[NSTATE_FIELDS].value = NULL;
@@ -164,7 +167,8 @@ void array_to_state(long* state_array, struct State* state) {
   state->coin_y        = state_array[5];
   state->cannon_t      = state_array[6];
   state->cannon_offset = state_array[7];
-#if NSTATE_FIELDS != 8
+  state->num_votes     = state_array[8];
+#if NSTATE_FIELDS != 9
 #error Update
 #endif
 }
@@ -178,7 +182,8 @@ void state_to_array(long* state_array, struct State* state) {
   state_array[5] = state->coin_y;
   state_array[6] = state->cannon_t;
   state_array[7] = state->cannon_offset;
-#if NSTATE_FIELDS != 8
+  state_array[8] = state->num_votes;
+#if NSTATE_FIELDS != 9
 #error Update
 #endif
 }
